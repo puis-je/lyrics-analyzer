@@ -1,7 +1,6 @@
 // ==========================================
 // 設定エリア (Google Forms連携)
 // ==========================================
-// ユーザーから提供された正しいフォーム情報を設定
 const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1DvjfHWDnxe9LJXZXAOY47dAN80rSCgWQEaU-aNMpc3c/formResponse';
 const ENTRY_ID_SONG = 'entry.625876421';
 const ENTRY_ID_ARTIST = 'entry.385476764';
@@ -50,7 +49,7 @@ analyzeBtn.addEventListener('click', async () => {
 
     } catch (error) {
         loadingDiv.classList.add('hidden');
-        outputContent.innerHTML = `<p style="color:red;">エラーが発生しました: ${error.message}</p><p>※APIキーがGoogle Searchに対応していない場合や、モデルが古い可能性があります。</p>`;
+        outputContent.innerHTML = `<p style="color:red;">エラーが発生しました: ${error.message}</p><p>※APIキーの設定やモデルのバージョンを確認してください。</p>`;
         analyzeBtn.disabled = false;
     }
 });
@@ -120,14 +119,10 @@ ${lyrics}
 出力はMarkdown形式で行ってください。
 `;
         
-        // Google検索ツールを有効化
+        // 【修正箇所】検索ツールの定義を修正
+        // google_search_retrieval ではなく google_search を使用
         toolsConfig = [{
-            google_search_retrieval: {
-                dynamic_retrieval_config: {
-                    mode: "MODE_DYNAMIC",
-                    dynamic_threshold: 0.7
-                }
-            }
+            google_search: {}
         }];
     }
 
@@ -164,7 +159,6 @@ ${lyrics}
 }
 
 function sendToGoogleForm(song, artist) {
-    // フォームURLが正しく設定されているか確認
     if (!GOOGLE_FORM_URL || GOOGLE_FORM_URL.includes('YOUR_FORM_ID_HERE')) {
         console.warn('Google Form URL is not configured correctly.');
         return;
@@ -174,7 +168,6 @@ function sendToGoogleForm(song, artist) {
     formData.append(ENTRY_ID_SONG, song);
     formData.append(ENTRY_ID_ARTIST, artist);
 
-    // no-corsモードで送信（成功してもレスポンスは見えない仕様）
     fetch(GOOGLE_FORM_URL, {
         method: 'POST',
         mode: 'no-cors',
