@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>歌詞年齢分析AI - Lyrics Age Analyzer</title>
     <link rel="stylesheet" href="style.css">
-    <!-- MarkdownをHTMLに変換するライブラリ -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🎵 歌詞年齢分析AI</h1>
-            <p>その歌詞、何歳なら理解できる？ 4つの視点で徹底分析。</p>
+            <p>その歌詞、精神年齢は何歳？ 4つの視点で徹底分析。</p>
         </header>
 
         <section class="settings-panel">
@@ -21,11 +20,11 @@
                 <input type="password" id="api-key" placeholder="AIzaSy..." required>
             </div>
             <div class="input-group">
-                <label for="model-select">Gemini Version (2026 Standard)</label>
+                <label for="model-select">Gemini Version</label>
                 <select id="model-select">
-                    <option value="gemini-2.5-flash" selected>Gemini 2.5 Flash (Standard)</option>
-                    <option value="gemini-2.5-pro">Gemini 2.5 Pro (High Reasoning)</option>
-                    <option value="gemini-2.0-flash">Gemini 2.0 Flash (Legacy)</option>
+                    <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Recommended)</option>
+                    <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                    <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
                 </select>
             </div>
         </section>
@@ -41,6 +40,13 @@
                     <input type="text" id="artist-name" placeholder="例: 米津玄師" required>
                 </div>
             </div>
+            
+            <!-- 【追加】歌詞貼り付けエリア -->
+            <div class="input-group" style="margin-top: 15px;">
+                <label for="lyrics-input">歌詞を直接貼り付ける (推奨・確実です) <span style="font-weight:normal; font-size:0.8em; color:#666;">※空欄の場合はAIがWeb検索を試みます</span></label>
+                <textarea id="lyrics-input" rows="6" placeholder="ここに歌詞を貼り付けると、幻覚を防いで確実に分析できます。" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ddd; resize: vertical;"></textarea>
+            </div>
+
             <button id="analyze-btn" class="primary-btn">分析する ✨</button>
         </section>
 
@@ -48,21 +54,19 @@
             <div class="result-header">
                 <h2>📊 分析レポート</h2>
                 <div class="export-buttons">
-                    <button onclick="exportReport('text')">Text保存</button>
-                    <button onclick="exportReport('md')">Markdown保存</button>
-                    <button onclick="exportReport('html')">HTML保存</button>
+                    <button onclick="exportReport('text')">Text</button>
+                    <button onclick="exportReport('md')">Markdown</button>
+                    <button onclick="exportReport('html')">HTML</button>
                 </div>
             </div>
             <div id="loading" class="hidden">
                 <div class="spinner"></div>
-                <p>歌詞を検索し、4つの視点で分析中...<br><span class="note">※正確な分析のため、Web上の情報を確認しています</span></p>
+                <p>分析中...<br><span class="note">※歌詞検索には時間がかかる場合があります</span></p>
             </div>
             <div id="output-content" class="markdown-body"></div>
-            
-            <button id="reset-btn" class="secondary-btn">リセットして新しい曲を分析</button>
+            <button id="reset-btn" class="secondary-btn">リセット</button>
         </section>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
