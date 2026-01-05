@@ -1,7 +1,8 @@
 // ==========================================
-// 設定エリア
+// 設定エリア (Google Forms連携)
 // ==========================================
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1DvjfHWDnxe9LJXZXAOY47dAN80rSCgWQEaU-aNMpc3c/formResponse'; 
+// ユーザーから提供された正しいフォーム情報を設定
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1DvjfHWDnxe9LJXZXAOY47dAN80rSCgWQEaU-aNMpc3c/formResponse';
 const ENTRY_ID_SONG = 'entry.625876421';
 const ENTRY_ID_ARTIST = 'entry.385476764';
 // ==========================================
@@ -24,11 +25,13 @@ analyzeBtn.addEventListener('click', async () => {
         return;
     }
 
+    // UI切り替え
     analyzeBtn.disabled = true;
     resultSection.classList.remove('hidden');
     loadingDiv.classList.remove('hidden');
     outputContent.innerHTML = '';
 
+    // Google Formsへ送信 (バックグラウンドで実行)
     sendToGoogleForm(songTitle, artistName);
 
     try {
@@ -82,12 +85,12 @@ Web検索は不要です。提供されたテキストのみを正として扱�
 ${lyrics}
 
 【分析フォーマット】
-以下の4つの視点で分析し、それぞれの「対象年齢」を判定してください。
+以下の4つの視点で分析し、それぞれの「想定対象年齢」を判定してください。
 1. **【語彙・漢字レベル】（読む力）**
 2. **【精神性・情緒レベル】（感じる力）**
 3. **【生活感・リアリティ】（暮らす力）**
 4. **【文脈・哲学レベル】（問いの重さ）**
-最後に「総合的な対象年齢」と総評をまとめてください。
+最後に「総合的な想定対象年齢」と総評をまとめてください。
 出力はMarkdown形式で行ってください。
 `;
     } 
@@ -108,16 +111,16 @@ ${lyrics}
 
 【分析フォーマット】
 （歌詞が見つかった場合のみ以下を出力）
-以下の4つの視点で分析し、それぞれの「対象年齢」を判定してください。
+以下の4つの視点で分析し、それぞれの「想定対象年齢」を判定してください。
 1. **【語彙・漢字レベル】（読む力）**
 2. **【精神性・情緒レベル】（感じる力）**
 3. **【生活感・リアリティ】（暮らす力）**
 4. **【文脈・哲学レベル】（問いの重さ）**
-最後に「総合的な対象年齢」と総評をまとめてください。
+最後に「総合的な想定対象年齢」と総評をまとめてください。
 出力はMarkdown形式で行ってください。
 `;
         
-        // 【重要】ここでGoogle検索ツールを有効化します
+        // Google検索ツールを有効化
         toolsConfig = [{
             google_search_retrieval: {
                 dynamic_retrieval_config: {
@@ -161,11 +164,24 @@ ${lyrics}
 }
 
 function sendToGoogleForm(song, artist) {
-    if (GOOGLE_FORM_URL.includes('YOUR_FORM_ID_HERE')) return;
+    // フォームURLが正しく設定されているか確認
+    if (!GOOGLE_FORM_URL || GOOGLE_FORM_URL.includes('YOUR_FORM_ID_HERE')) {
+        console.warn('Google Form URL is not configured correctly.');
+        return;
+    }
+
     const formData = new FormData();
     formData.append(ENTRY_ID_SONG, song);
     formData.append(ENTRY_ID_ARTIST, artist);
-    fetch(GOOGLE_FORM_URL, { method: 'POST', mode: 'no-cors', body: formData }).catch(e => console.error(e));
+
+    // no-corsモードで送信（成功してもレスポンスは見えない仕様）
+    fetch(GOOGLE_FORM_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+    })
+    .then(() => console.log('Form submission request sent.'))
+    .catch(e => console.error('Form submission failed:', e));
 }
 
 function addSearchLinkButton(song, artist) {

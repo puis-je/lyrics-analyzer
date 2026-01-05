@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>歌詞年齢分析AI - Lyrics Age Analyzer</title>
+    <title>Lyrics Age Analyzer</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎵 歌詞年齢分析AI</h1>
-            <p>その歌詞、対象年齢は何歳？ 4つの視点で徹底分析。</p>
+            <h1>🎵 Lyrics Age Analyzer</h1>
+            <p>その歌詞、想定対象年齢は何歳？ 4つの視点で徹底分析。</p>
         </header>
 
         <section class="settings-panel">
@@ -22,9 +22,10 @@
             <div class="input-group">
                 <label for="model-select">Gemini Version</label>
                 <select id="model-select">
-                    <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Recommended)</option>
-                    <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
-                    <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                    <!-- 2026年現在の標準モデル -->
+                    <option value="gemini-2.5-flash" selected>Gemini 2.5 Flash (Standard)</option>
+                    <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash</option>
+                    <option value="gemini-1.5-pro">Gemini 1.5 Pro (High Reasoning)</option>
                 </select>
             </div>
         </section>
@@ -41,7 +42,7 @@
                 </div>
             </div>
             
-            <!-- 【追加】歌詞貼り付けエリア -->
+            <!-- 歌詞貼り付けエリア -->
             <div class="input-group" style="margin-top: 15px;">
                 <label for="lyrics-input">歌詞を直接貼り付ける (推奨・確実です) <span style="font-weight:normal; font-size:0.8em; color:#666;">※空欄の場合はAIがWeb検索を試みます</span></label>
                 <textarea id="lyrics-input" rows="6" placeholder="ここに歌詞を貼り付けると、幻覚を防いで確実に分析できます。" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ddd; resize: vertical;"></textarea>
